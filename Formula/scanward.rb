@@ -9,8 +9,6 @@
 # Each release tarball carries the binary, the rule corpus, and a
 # `scanward-corpus` wrapper that points the scanner at that corpus.
 class Scanward < Formula
-  include Language::Rust::Cache
-
   desc "Fast, fully-offline multi-language SAST scanner"
   homepage "https://github.com/deepusingh2530/scanward"
   license "PolyForm-Noncommercial-1.0.0"
