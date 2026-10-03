@@ -12,26 +12,26 @@ class Scanward < Formula
   desc "Fast, fully-offline multi-language SAST scanner"
   homepage "https://github.com/deepusingh2530/scanward"
   license "PolyForm-Noncommercial-1.0.0"
-  version "0.13.2"
+  version "0.14.0"
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/deepusingh2530/scanward/releases/download/v#{version}/scanward-v#{version}-macos-arm64.tar.gz"
-      sha256 "03b4384c93846ecaefe84ed0e9edf2dbd16cabeb843dabeb33a0223ccb2d9f4d"
+      sha256 "1c02d3679275447913062372b24401ce1f9abd2e9e8516994dd7c83e2e09808a"
     else
       # No Intel macOS binary is published, so build from the source tarball.
       url "https://github.com/deepusingh2530/scanward/archive/refs/tags/v#{version}.tar.gz"
-      sha256 "f647c0ea8915ccc7768d41a441cbdf831c0a7603e6fb0dfe71e823d20ca096e5"
+      sha256 "8ddcac67802eeca2e7afbe7a8d0daf6cca23bcafb9013bdd538eb3b182066c8e"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && !Formula["glibc"].installed?
       url "https://github.com/deepusingh2530/scanward/releases/download/v#{version}/scanward-v#{version}-linux-musl.tar.gz"
-      sha256 "ac01b3516a6c44623fdae8f1ebca8201ed221b4f48afe4d6278a94dd7c1a43fc"
+      sha256 "af9867b7781d8d72c0be86ce0376b3dba48de77a845b3dc24439b1ee4afc53f3"
     else
       url "https://github.com/deepusingh2530/scanward/releases/download/v#{version}/scanward-v#{version}-linux-gnu.tar.gz"
-      sha256 "6ade8e9c096b401ee4bf77f6a056c827388218f8f7c81e7c1fc494adb2c4ba54"
+      sha256 "2c8ee2b6a4e315a243141181ff0e173eca03e91571f1e114d584e7d8fdca0ef4"
     end
   end
 
