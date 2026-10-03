@@ -36,15 +36,38 @@ class Scanward < Formula
   end
 
   def install
-    if build.head? || OS.mac? && Hardware::CPU.int?
-      # Built from source: only the binary is present.
-      bin.install "scanward"
-    else
-      bin.install "scanward"
-      (pkgshare/"rules").install Dir["rules"]
-      bin.install "scanward-corpus"
-    end
+    bin.install "scanward"
     pkgshare.install "LICENSE" if File.exist?("LICENSE")
+
+    # Only prebuilt archives carry the corpus; a source build does not, so there
+    # is nothing to install and no wrapper to write.
+    return unless File.exist?("rules")
+
+    (pkgshare/"rules").install Dir["rules"]
+
+    # Generate our own wrapper rather than shipping the tarball's: the bundled
+    # one resolves the corpus relative to its own directory, and Homebrew puts
+    # the corpus in pkgshare, not next to the binary.
+    (bin/"scanward-corpus").write <<~SH
+      #!/bin/sh
+      # Run scanward against the Homebrew-installed rule corpus.
+      here="$(cd "$(dirname "$0")" && pwd)"
+      rules="#{pkgshare}/rules"
+      case "$1" in
+        ""|-*) exec "$here/scanward" "$@" ;;
+        scan|autofix)
+          sub="$1"; shift
+          for arg in "$@"; do
+            case "$arg" in
+              --rules|--rules=*) exec "$here/scanward" "$sub" "$@" ;;
+            esac
+          done
+          exec "$here/scanward" "$sub" --rules "$rules" "$@"
+          ;;
+        rule) exec "$here/scanward" rule test "$rules" ;;
+        *) exec "$here/scanward" "$@" ;;
+      esac
+    SH
   end
 
   test do
